@@ -21,6 +21,7 @@ class SamplerService : Service() {
     private val sampleMs = 15 * 60 * 1000L  // 15 minutes
     private lateinit var thread: HandlerThread
     private lateinit var handler: Handler
+    private val btReceiver = BtReceiver()
     @Volatile private var lastStatus = "starting..."
 
     private val sampleTask = object : Runnable {
@@ -44,6 +45,12 @@ class SamplerService : Service() {
         thread.start()
         handler = Handler(thread.looper)
         handler.post(sampleTask)  // first sample immediately
+        // live bluetooth connect/disconnect events (car = driving, etc.)
+        val f = android.content.IntentFilter().apply {
+            addAction(android.bluetooth.BluetoothDevice.ACTION_ACL_CONNECTED)
+            addAction(android.bluetooth.BluetoothDevice.ACTION_ACL_DISCONNECTED)
+        }
+        registerReceiver(btReceiver, f)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_STICKY
@@ -53,6 +60,7 @@ class SamplerService : Service() {
     override fun onDestroy() {
         handler.removeCallbacksAndMessages(null)
         thread.quitSafely()
+        try { unregisterReceiver(btReceiver) } catch (e: Exception) {}
         super.onDestroy()
     }
 

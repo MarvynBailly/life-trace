@@ -20,8 +20,8 @@ android {
         applicationId = "com.lifetrace"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         // Pulled from secrets.properties at build time (never committed).
         buildConfigField("String", "BASE_URL", "\"${secrets.getProperty("BASE_URL", "")}\"")

@@ -127,6 +127,11 @@ private fun StatusScreen() {
                 permLauncher.launch(arrayOf("android.permission.POST_NOTIFICATIONS"))
             }) { Text("Allow notifications") }
         }
+        if (Build.VERSION.SDK_INT >= 31) {
+            OutlinedButton(onClick = {
+                permLauncher.launch(arrayOf("android.permission.BLUETOOTH_CONNECT"))
+            }) { Text("Allow Bluetooth (car / headphones)") }
+        }
         OutlinedButton(onClick = {
             val i = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
             i.data = Uri.parse("package:" + ctx.packageName)

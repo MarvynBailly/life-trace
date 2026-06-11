@@ -213,6 +213,21 @@ object Net {
         return "uploaded ${apps.length()} apps (${totalMin / 60} min screen) at ${isoNow().substring(11,16)}"
     }
 
+    /** Fire a single bluetooth connect/disconnect event immediately (car audio = driving signal). */
+    fun postBluetoothEvent(event: String, addr: String, name: String?) {
+        val batch = JSONObject()
+        batch.put("device", DEVICE)
+        val arr = JSONArray()
+        val o = JSONObject()
+        o.put("addr", addr)
+        if (name != null) o.put("name", name)
+        o.put("event", event)
+        o.put("connected", event == "connected")
+        arr.put(o)
+        batch.put("bluetooth", arr)
+        post("/ingest/telemetry", batch)
+    }
+
     // ---- check-in ----
 
     fun fetchCheckin(): JSONObject = JSONObject(get("/checkin/today", false))
