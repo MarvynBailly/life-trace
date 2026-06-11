@@ -1,0 +1,13 @@
+# secrets / machine-specific
+secrets.properties
+local.properties
+# build
+.gradle/
+build/
+*/build/
+captures/
+.cxx/
+# IDE / OS
+.idea/
+*.iml
+.DS_Store
